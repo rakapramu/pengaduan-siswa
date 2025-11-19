@@ -44,56 +44,44 @@
             <li class="sidebar-title">Menu</li>
 
             <li class="sidebar-item">
-                <a href="index.html" class='sidebar-link'>
+                <a href="{{ route('dashboard') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Dashboard</span>
                 </a>
-
-
             </li>
 
-            <li class="sidebar-title">Master Data</li>
-            <li class="sidebar-item  {{ request()->is('guru*') ? 'active' : '' }}">
-                <a href="{{ route('guru.index') }}" class='sidebar-link'>
+            @if (Auth::user()->role == 'admin')
+                <li class="sidebar-title">Master Data</li>
+                <li class="sidebar-item">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="sidebar-link border-0 bg-transparent w-100 text-start">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+                <li class="sidebar-item  {{ request()->is('guru*') ? 'active' : '' }}">
+                    <a href="{{ route('guru.index') }}" class='sidebar-link'>
+                        <i class="bi bi-cloud-arrow-up-fill"></i>
+                        <span>Guru</span>
+                    </a>
+                </li>
+                <li class="sidebar-item  {{ request()->is('siswa*') ? 'active' : '' }}">
+                    <a href="{{ route('siswa.index') }}" class='sidebar-link'>
+                        <i class="bi bi-cloud-arrow-up-fill"></i>
+                        <span>Siswa</span>
+                    </a>
+                </li>
+            @endif
+
+            <li class="sidebar-title">Konseling dan Pengaduan</li>
+            <li class="sidebar-item  {{ request()->is('konseling*') ? 'active' : '' }}">
+                <a href="{{ route('konseling.index') }}" class='sidebar-link'>
                     <i class="bi bi-cloud-arrow-up-fill"></i>
-                    <span>Guru</span>
+                    <span>Konseling</span>
                 </a>
             </li>
-            <li class="sidebar-item  {{ request()->is('siswa*') ? 'active' : '' }}">
-                <a href="{{ route('siswa.index') }}" class='sidebar-link'>
-                    <i class="bi bi-cloud-arrow-up-fill"></i>
-                    <span>Siswa</span>
-                </a>
-            </li>
-
-            <li class="sidebar-item  has-sub">
-                <a href="#" class='sidebar-link'>
-                    <i class="bi bi-person-badge-fill"></i>
-                    <span>Authentication</span>
-                </a>
-
-                <ul class="submenu ">
-
-                    <li class="submenu-item  ">
-                        <a href="auth-login.html" class="submenu-link">Login</a>
-
-                    </li>
-
-                    <li class="submenu-item  ">
-                        <a href="auth-register.html" class="submenu-link">Register</a>
-
-                    </li>
-
-                    <li class="submenu-item  ">
-                        <a href="auth-forgot-password.html" class="submenu-link">Forgot Password</a>
-
-                    </li>
-
-                </ul>
-
-
-            </li>
-
         </ul>
     </div>
 </div>

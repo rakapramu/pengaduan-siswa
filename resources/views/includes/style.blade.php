@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{{ asset('dashboard') }}/compiled/css/app.css">
 <link rel="stylesheet" href="{{ asset('dashboard') }}/compiled/css/app-dark.css">
 <link rel="stylesheet" href="{{ asset('dashboard') }}/compiled/css/iconly.css">
+<link rel="stylesheet" href="{{ asset('dashboard') }}/extensions/flatpickr/flatpickr.min.css">
+<link rel="stylesheet" href="{{ asset('dashboard') }}/extensions/toastify-js/src/toastify.css">
 <link rel="stylesheet"
     href="{{ asset('dashboard') }}/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
 <link rel="stylesheet" href="{{ asset('dashboard') }}/compiled/css/table-datatable-jquery.css" />

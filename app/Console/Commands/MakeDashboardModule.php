@@ -47,7 +47,7 @@ class MakeDashboardModule extends Command
 
         // === 4. Tambahkan Route ===
         $routeFile = base_path('routes/web.php');
-        $routeLine = "\nRoute::resource('{$slug}', {$controllerNamespace}\\{$controllerName}::class);";
+        $routeLine = "\nRoute::resource('{$slug}', {$controllerName}::class);";
         File::append($routeFile, $routeLine);
         $this->info("✅ Route added to web.php");
 
