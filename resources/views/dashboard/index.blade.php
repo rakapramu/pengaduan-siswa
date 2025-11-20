@@ -13,12 +13,12 @@
                                 <div class="row">
                                     <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
                                         <div class="stats-icon purple mb-2">
-                                            <i class="iconly-boldShow"></i>
+                                            <i class="iconly-boldProfile"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Profile Views</h6>
-                                        <h6 class="font-extrabold mb-0">112.000</h6>
+                                        <h6 class="text-muted font-semibold">Jumlah Siswa</h6>
+                                        <h6 class="font-extrabold mb-0">{{ $siswaCount }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -34,8 +34,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Followers</h6>
-                                        <h6 class="font-extrabold mb-0">183.000</h6>
+                                        <h6 class="text-muted font-semibold">Jumlah Guru</h6>
+                                        <h6 class="font-extrabold mb-0">{{ $guruCount }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -51,8 +51,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Following</h6>
-                                        <h6 class="font-extrabold mb-0">80.000</h6>
+                                        <h6 class="text-muted font-semibold">Konseling Masuk</h6>
+                                        <h6 class="font-extrabold mb-0">{{ $konselingMasuk }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -68,8 +68,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Saved Post</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
+                                        <h6 class="text-muted font-semibold">Aduan Hari Ini</h6>
+                                        <h6 class="font-extrabold mb-0">{{ $aduanHariIni }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                     <div class="col-9">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Profile Visit</h4>
+                                <h4>Konseling</h4>
                             </div>
                             <div class="card-body">
                                 <div id="chart-profile-visit"></div>
@@ -90,7 +90,7 @@
                     <div class="col-3">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Visitors Profile</h4>
+                                <h4>Perbandingan Murid</h4>
                             </div>
                             <div class="card-body">
                                 <div id="chart-visitors-profile"></div>
@@ -143,3 +143,80 @@
         </section>
     </div>
 @endsection
+@push('js')
+    <script>
+        let konselingData = @json($dataKonseling);
+        let laki = {{ $laki }};
+        let perempuan = {{ $perempuan }};
+
+        let optionsVisitorsProfile = {
+            series: [laki, perempuan],
+            labels: ["Laki-laki", "Perempuan"],
+            colors: ["#435ebe", "#55c6e8"],
+            chart: {
+                type: "donut",
+                width: "100%",
+                height: "350px",
+            },
+            legend: {
+                position: "bottom",
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: "30%",
+                    },
+                },
+            },
+        };
+        var optionsProfileVisit = {
+            annotations: {
+                position: "back",
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            chart: {
+                type: "bar",
+                height: 300,
+            },
+            fill: {
+                opacity: 1,
+            },
+            plotOptions: {},
+            series: [{
+                name: "Konseling",
+                data: konselingData,
+            }, ],
+            colors: "#435ebe",
+            xaxis: {
+                categories: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                ],
+            },
+        };
+        var chartVisitorsProfile = new ApexCharts(
+            document.getElementById("chart-visitors-profile"),
+            optionsVisitorsProfile
+        );
+        var chartProfileVisit = new ApexCharts(
+            document.querySelector("#chart-profile-visit"),
+            optionsProfileVisit
+        );
+
+
+        chartProfileVisit.render();
+        chartVisitorsProfile.render();
+    </script>
+@endpush

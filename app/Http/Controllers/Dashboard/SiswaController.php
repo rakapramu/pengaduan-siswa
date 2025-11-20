@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Imports\SiswaImport;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
@@ -61,9 +63,10 @@ class SiswaController extends Controller
         }
     }
 
-    public function show($id)
+    public function show(User $siswa)
     {
-        return view('dashboard.siswa.show', compact('id'));
+        $title = 'Siswa';
+        return view('dashboard.siswa.show', compact('siswa', 'title'));
     }
 
     public function edit(User $siswa)
@@ -123,5 +126,25 @@ class SiswaController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        $import = new SiswaImport();
+
+        Excel::import($import, $request->file('file'));
+
+        // Jika ada baris gagal
+        if ($import->failures()->isNotEmpty()) {
+            return back()->with([
+                'failures' => $import->failures()
+            ]);
+        }
+
+        return back()->with('success', 'Data siswa berhasil diimport!');
     }
 }

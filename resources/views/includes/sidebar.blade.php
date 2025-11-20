@@ -82,6 +82,12 @@
                     <span>Konseling</span>
                 </a>
             </li>
+            <li class="sidebar-item  {{ request()->is('pengaduan*') ? 'active' : '' }}">
+                <a href="{{ route('pengaduan.index') }}" class='sidebar-link'>
+                    <i class="bi bi-book"></i>
+                    <span>{{ Auth::user()->role == 'admin' || Auth::user()->role == 'guru' ? 'Pengaduan Masuk' : 'Pengaduan Saya' }}</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

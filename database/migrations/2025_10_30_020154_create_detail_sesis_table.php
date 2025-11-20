@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('sesi_id')->references('id')->on('sesi_konselings');
             $table->date('tanggal');
             $table->time('waktu_mulai');
-            $table->time('waktu_selesai');
-            $table->text('tindak_lanjut');
+            $table->time('waktu_selesai')->nullable();
+            $table->text('tindak_lanjut')->nullable();
             $table->timestamps();
         });
     }

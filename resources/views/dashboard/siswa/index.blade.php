@@ -27,6 +27,9 @@
                     <div class="d-flex">
                         <h5 class="card-title">Data {{ ucwords($title) }}</h5>
                         <a href="{{ route('siswa.create') }}" class="btn btn-primary ms-auto">Tambah Data</a>
+                        {{-- upload with excel --}}
+                        <a href="{{ route('siswa.import') }}" class="btn btn-primary ms-auto">
+                            <i class="bi bi-file-earmark-excel-fill"></i>Import Data</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -45,7 +48,7 @@
                                     <tr>
                                         <td>{{ ucwords($item->name) }}</td>
                                         <td>{{ $item->email }}</td>
-                                        <td>{{ $item->siswa->nis }}</td>
+                                        <td>{{ $item->siswa->nis ?? '' }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('siswa.edit', $item->id) }}"

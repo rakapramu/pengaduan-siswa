@@ -10,11 +10,16 @@ class Siswa extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function konseling()
     {
         return $this->hasMany(SesiKonseling::class);
+    }
+
+    public function pengaduan()
+    {
+        return $this->hasMany(Pengaduan::class);
     }
 }

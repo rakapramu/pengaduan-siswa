@@ -27,8 +27,8 @@
                     <div class="d-flex">
                         <h5 class="card-title">Data {{ ucwords($title) }}</h5>
                         @if (Auth::user()->role == 'siswa')
-                            <a data-bs-toggle="modal" data-bs-target="#backdrop" class="btn btn-primary ms-auto">Ajukan
-                                Konseling</a>
+                            <a data-bs-toggle="modal" data-bs-target="#backdrop" class="btn btn-primary ms-auto">Buat
+                                Pengaduan</a>
                         @endif
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         <table class="table" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th>Guru BK</th>
+                                    <th>Nama Pengirim</th>
                                     <th>Topik</th>
                                     <th>Deskripsi</th>
                                     <th>Status</th>
@@ -47,25 +47,44 @@
                             <tbody>
                                 @foreach ($data as $item)
                                     <tr>
-                                        <td>{{ ucwords($item->guru->nama) }}</td>
+                                        <td>{{ ucwords($item->siswa->nama) }}</td>
                                         <td>{{ $item->topik }}</td>
                                         <td>{{ $item->deskripsi }}</td>
                                         <td>
-                                            @if ($item->status == 'proses')
-                                                <span class="badge bg-warning">Proses</span>
-                                            @elseif ($item->status == 'batal')
-                                                <span class="badge bg-danger">Ditolak</span>
+                                            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'guru')
+                                                <form action="{{ route('pengaduan.status', $item->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+
+                                                    <select name="status" class="form-select form-select-sm"
+                                                        onchange="this.form.submit()">
+                                                        <option value="proses"
+                                                            {{ $item->status == 'proses' ? 'selected' : '' }}>
+                                                            Proses
+                                                        </option>
+                                                        <option value="batal"
+                                                            {{ $item->status == 'batal' ? 'selected' : '' }}>
+                                                            Ditolak
+                                                        </option>
+                                                        <option value="selesai"
+                                                            {{ $item->status == 'selesai' ? 'selected' : '' }}>
+                                                            Selesai
+                                                        </option>
+                                                    </select>
+                                                </form>
                                             @else
-                                                <span class="badge bg-success">Selesai</span>
+                                                @if ($item->status == 'proses')
+                                                    <span class="badge bg-warning">Proses</span>
+                                                @elseif ($item->status == 'batal')
+                                                    <span class="badge bg-danger">Ditolak</span>
+                                                @else
+                                                    <span class="badge bg-success">Selesai</span>
+                                                @endif
                                             @endif
                                         </td>
                                         <td>
-                                            @if (Auth::user()->role == 'guru' || Auth::user()->role == 'admin')
-                                                <a href="{{ route('konseling.show', $item->id) }}"
-                                                    class="btn btn-primary">Detail</a>
-                                            @endif
                                             @if (Auth::user()->role == 'admin')
-                                                <form action="{{ route('konseling.destroy', $item->id) }}" method="POST">
+                                                <form action="{{ route('pengaduan.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -99,14 +118,9 @@
                     <form action="" id="formKonseling">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="guru" class="form-label">Rencana Tanggal Konseling</label>
-                                <input type="date" class="form-control flatpickr" placeholder="Pilih Tanggan dan Jam"
-                                    name="tanggal">
-                                <span class="text-danger error-tanggal"></span>
-                            </div>
-                            <div class="col-md-12 mb-3">
                                 <label for="guru" class="form-label">Topik</label>
-                                <input type="text" class="form-control" name="topik" placeholder="Cth: Bullying">
+                                <input type="text" class="form-control" name="topik"
+                                    placeholder="Cth: Kamar Mandi Rusak">
                                 <span class="text-danger error-topik"></span>
                             </div>
                             <div class="col-md-12 mb-3">
@@ -136,7 +150,7 @@
             $('.text-danger').text("");
 
             $.ajax({
-                url: "{{ route('konseling.store') }}",
+                url: "{{ route('pengaduan.store') }}",
                 method: "POST",
                 data: form.serialize(),
                 headers: {

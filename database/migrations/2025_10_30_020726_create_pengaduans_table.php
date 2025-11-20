@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('topik');
             $table->text('deskripsi');
             $table->enum('status', ['proses', 'batal', 'selesai'])->default('proses');
-            $table->foreignId('guru_id')->references('id')->on('gurus');
+            // $table->foreignId('guru_id')->references('id')->on('gurus');
             $table->timestamps();
         });
     }

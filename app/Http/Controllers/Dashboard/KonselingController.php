@@ -66,7 +66,7 @@ class KonselingController extends Controller
             DB::commit();
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil Mengajukan Konseling',
+                'message' => 'Berhasil Mengajukan Konseling, Silahkan Menunggu',
             ]);
         } catch (Exception $e) {
             DB::rollBack();
@@ -77,9 +77,10 @@ class KonselingController extends Controller
         }
     }
 
-    public function show($id)
+    public function show(SesiKonseling $konseling)
     {
-        return view('dashboard.konseling.show', compact('id'));
+        $title = 'Konseling';
+        return view('dashboard.konseling.show', compact('konseling', 'title'));
     }
 
     public function edit($id)
@@ -87,9 +88,26 @@ class KonselingController extends Controller
         return view('dashboard.konseling.edit', compact('id'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, SesiKonseling $konseling)
     {
-        //
+        $request->validate([
+            'status' => 'required|in:batal,selesai'
+        ]);
+        // dd($request->all());
+        try {
+            DB::beginTransaction();
+            $konseling->update([
+                'status' => $request->status
+            ]);
+            DetailSesi::where('sesi_id', $konseling->id)->update([
+                'waktu_selesai' => Carbon::now()->format('H:i'),
+                'tindak_lanjut' => $request->tindak_lanjut
+            ]);
+            DB::commit();
+            return redirect()->route('konseling.index')->with('success', 'Sesi Konseling Telah dilakukan');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function destroy($id)
