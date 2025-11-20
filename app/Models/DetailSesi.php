@@ -10,6 +10,6 @@ class DetailSesi extends Model
 
     public function sesi()
     {
-        return $this->belongsTo(SesiKonseling::class);
+        return $this->belongsTo(SesiKonseling::class, 'sesi_id');
     }
 }

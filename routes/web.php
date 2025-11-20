@@ -19,10 +19,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->prefix('admin-panel')->group(function () {
     Route::get('/', function () {
+        $title = '';
         $siswaCount = Siswa::count();
         $guruCount = Guru::count();
         $aduanHariIni = Pengaduan::whereDate('created_at', Carbon::today())->count();
-        $konselingMasuk = SesiKonseling::count();
+        $konselingMasuk = SesiKonseling::whereDate('created_at', Carbon::today())->count();
         $konselingPerBulan = SesiKonseling::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
             ->groupBy('bulan')
             ->orderBy('bulan')
@@ -38,8 +39,7 @@ Route::middleware('auth')->prefix('admin-panel')->group(function () {
         // Donut chart siswa
         $laki = Siswa::where('jenis_kelamin', 'L')->count();
         $perempuan = Siswa::where('jenis_kelamin', 'P')->count();
-        // dd($dataKonseling);
-        return view('dashboard.index', compact('siswaCount', 'guruCount', 'aduanHariIni', 'konselingMasuk', 'dataKonseling', 'laki', 'perempuan'));
+        return view('dashboard.index', compact('siswaCount', 'guruCount', 'aduanHariIni', 'konselingMasuk', 'dataKonseling', 'laki', 'perempuan', 'title'));
     })->name('dashboard');
 
     Route::resource('guru', GuruController::class);
@@ -51,7 +51,10 @@ Route::middleware('auth')->prefix('admin-panel')->group(function () {
     Route::post('siswa/import', [SiswaController::class, 'import'])->name('siswa-import.post');
 
     Route::resource('konseling', KonselingController::class);
+    Route::get('konseling-export', [KonselingController::class, 'export'])->name('konseling.export');
+    Route::get('konseling-notif-read/{konseling}', [KonselingController::class, 'readNotification'])->name('konseling.notif.read');
     Route::post('logout', [AuthController::class, 'logoutAction'])->name('logout');
     Route::resource('pengaduan', PengaduanController::class);
+    Route::get('pengaduan-export', [PengaduanController::class, 'export'])->name('pengaduan.export');
     Route::put('pengaduan/status/{pengaduan}', [PengaduanController::class, 'updateStatus'])->name('pengaduan.status');
 });

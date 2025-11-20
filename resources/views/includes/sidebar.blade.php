@@ -2,7 +2,7 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo">
-                <a href="index.html"><img src="{{ asset('dashboard') }}/compiled/svg/logo.svg" alt="Logo"
+                <a href=""><img src="{{ asset('dashboard') }}/compiled/svg/logo.svg" alt="Logo"
                         srcset=""></a>
             </div>
             <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
@@ -52,15 +52,6 @@
 
             @if (Auth::user()->role == 'admin')
                 <li class="sidebar-title">Master Data</li>
-                <li class="sidebar-item">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="sidebar-link border-0 bg-transparent w-100 text-start">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Logout</span>
-                        </button>
-                    </form>
-                </li>
                 <li class="sidebar-item  {{ request()->is('guru*') ? 'active' : '' }}">
                     <a href="{{ route('guru.index') }}" class='sidebar-link'>
                         <i class="bi bi-cloud-arrow-up-fill"></i>

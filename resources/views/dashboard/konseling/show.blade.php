@@ -149,3 +149,23 @@
         <!-- // Basic multiple Column Form section end -->
     </div>
 @endsection
+@push('js')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Jika belum pernah reload → tandai dan reload
+            if (!sessionStorage.getItem("doubleReload")) {
+                sessionStorage.setItem("doubleReload", "1");
+                location.reload();
+            }
+            // Jika sudah reload sekali → hapus flag dan reload lagi
+            else if (sessionStorage.getItem("doubleReload") === "1") {
+                sessionStorage.setItem("doubleReload", "2");
+                location.reload();
+            }
+            // Reload sudah 2 kali → hapus flag dan biarkan halaman normal
+            else {
+                sessionStorage.removeItem("doubleReload");
+            }
+        });
+    </script>
+@endpush

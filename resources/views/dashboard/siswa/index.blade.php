@@ -24,12 +24,18 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex">
-                        <h5 class="card-title">Data {{ ucwords($title) }}</h5>
-                        <a href="{{ route('siswa.create') }}" class="btn btn-primary ms-auto">Tambah Data</a>
-                        {{-- upload with excel --}}
-                        <a href="{{ route('siswa.import') }}" class="btn btn-primary ms-auto">
-                            <i class="bi bi-file-earmark-excel-fill"></i>Import Data</a>
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0">Data {{ ucwords($title) }}</h5>
+
+                        <div class="ms-auto d-flex gap-2">
+                            <a href="{{ route('siswa.create') }}" class="btn btn-primary">
+                                Tambah Data
+                            </a>
+
+                            <a href="{{ route('siswa.import') }}" class="btn btn-success">
+                                <i class="bi bi-file-earmark-excel-fill"></i> Import Data
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">

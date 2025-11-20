@@ -26,10 +26,18 @@
                 <div class="card-header">
                     <div class="d-flex">
                         <h5 class="card-title">Data {{ ucwords($title) }}</h5>
-                        @if (Auth::user()->role == 'siswa')
-                            <a data-bs-toggle="modal" data-bs-target="#backdrop" class="btn btn-primary ms-auto">Buat
-                                Pengaduan</a>
-                        @endif
+                        <div class="ms-auto d-flex gap-2">
+                            @if (Auth::user()->role == 'siswa')
+                                <a data-bs-toggle="modal" data-bs-target="#backdrop" class="btn btn-primary ms-auto">Buat
+                                    Pengaduan</a>
+                            @endif
+                            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'guru')
+                                <a href="{{ route('pengaduan.export') }}" class="btn btn-danger">
+                                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                                    Export PDF
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -47,7 +55,7 @@
                             <tbody>
                                 @foreach ($data as $item)
                                     <tr>
-                                        <td>{{ ucwords($item->siswa->nama) }}</td>
+                                        <td>{{ ucwords($item->siswa->nama) ?? '' }}</td>
                                         <td>{{ $item->topik }}</td>
                                         <td>{{ $item->deskripsi }}</td>
                                         <td>

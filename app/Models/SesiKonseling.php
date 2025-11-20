@@ -20,6 +20,6 @@ class SesiKonseling extends Model
 
     public function detailSesi()
     {
-        return $this->hasOne(DetailSesi::class);
+        return $this->hasOne(DetailSesi::class, 'sesi_id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengaduan;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,5 +91,15 @@ class PengaduanController extends Controller
         } catch (\Throwable $th) {
             return redirect()->route('pengaduan.index')->with('error', 'Pengaduan gagal dihapus');
         }
+    }
+
+    public function export()
+    {
+        $data = Pengaduan::with('siswa')->get();
+
+        $pdf = Pdf::loadView('dashboard.pdf.pengaduan', compact('data'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('laporan_pengaduan.pdf');
     }
 }

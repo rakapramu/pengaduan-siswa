@@ -53,6 +53,7 @@ class PengajuanKonseling extends Notification
             'siswa_id' => $this->konseling->siswa_id,
             'title' => 'Pengajuan Konseling',
             'message' => $this->konseling->siswa->nama . ' telah mengajukan konseling',
+            'route' => route('konseling.notif.read', $this->konseling->id)
         ];
     }
 }

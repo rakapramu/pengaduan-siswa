@@ -8,6 +8,7 @@ use App\Models\Guru;
 use App\Models\SesiKonseling;
 use App\Models\User;
 use App\Notifications\PengajuanKonseling;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -83,6 +84,13 @@ class KonselingController extends Controller
         return view('dashboard.konseling.show', compact('konseling', 'title'));
     }
 
+    public function readNotification(SesiKonseling $konseling)
+    {
+        $title = 'Konseling';
+        auth()->user()->unreadNotifications->where('id', request('id'))?->markAsRead();
+        return view('dashboard.konseling.show', compact('konseling', 'title'));
+    }
+
     public function edit($id)
     {
         return view('dashboard.konseling.edit', compact('id'));
@@ -113,5 +121,14 @@ class KonselingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function export()
+    {
+        $data = SesiKonseling::with('siswa', 'guru', 'detailSesi')->get();
+        $pdf = Pdf::loadView('dashboard.pdf.konseling', compact('data'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('laporan_konseling.pdf');
     }
 }
